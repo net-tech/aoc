@@ -1,13 +1,8 @@
+use crate::common::get_data_from_file_or_str;
 use std::collections::HashMap;
-use std::fs;
 
 pub fn part1(path_or_data: String) -> i32 {
-    let data: String;
-    if path_or_data.ends_with(".txt") {
-        data = fs::read_to_string(path_or_data).expect("Error reading data file");
-    } else {
-        data = path_or_data;
-    }
+    let data = get_data_from_file_or_str(path_or_data);
 
     let mut nums: Vec<i32> = vec![];
 
@@ -22,14 +17,22 @@ pub fn part1(path_or_data: String) -> i32 {
         // I really don't wanna use a nested for loop but this is my first time using Rust so idk if there is a better way.
         for (i, n) in filtered_content.into_iter().enumerate() {
             if total_length == 1 {
-                nums.push(format!("{}{}", n, n).parse().expect("Failed to parse into number (i32)"));
+                nums.push(
+                    format!("{}{}", n, n)
+                        .parse()
+                        .expect("Failed to parse into number (i32)"),
+                );
                 break;
             } else if first_num.is_none() {
                 first_num = Some(n);
                 // Check if this is the last element.
             } else if first_num.is_some() && second_num.is_none() && i == total_length - 1 {
                 second_num = Some(n);
-                nums.push(format!("{}{}", first_num.expect("Expected this to be defined"), n).parse().expect("Failed to parse into number (i32)"))
+                nums.push(
+                    format!("{}{}", first_num.expect("Expected this to be defined"), n)
+                        .parse()
+                        .expect("Failed to parse into number (i32)"),
+                )
             }
         }
     }
@@ -40,12 +43,7 @@ pub fn part1(path_or_data: String) -> i32 {
 }
 
 pub fn part2(path_or_data: String) -> i32 {
-    let data: String;
-    if path_or_data.ends_with(".txt") {
-        data = fs::read_to_string(path_or_data).expect("Error reading data file");
-    } else {
-        data = path_or_data;
-    }
+    let data = get_data_from_file_or_str(path_or_data);
 
     let mut nums: Vec<i32> = vec![];
     let number_word_equivalents: HashMap<&str, &str> = HashMap::from([
@@ -73,8 +71,8 @@ pub fn part2(path_or_data: String) -> i32 {
         for (i, &char) in chars.iter().enumerate() {
             // Insert the character which was last removed
             if let Some((stored_char, _)) = stored_char_info {
-                    result.push(stored_char);
-                    stored_char_info = None;
+                result.push(stored_char);
+                stored_char_info = None;
             }
 
             result.push(char);
@@ -96,21 +94,29 @@ pub fn part2(path_or_data: String) -> i32 {
         // I really don't wanna use a nested for loop but this is my first time using Rust so idk if there is a better way.
         for (i, n) in filtered_content.into_iter().enumerate() {
             if total_length == 1 {
-                nums.push(format!("{}{}", n, n).parse().expect("Failed to parse into number (i32)"));
+                nums.push(
+                    format!("{}{}", n, n)
+                        .parse()
+                        .expect("Failed to parse into number (i32)"),
+                );
                 break;
             } else if first_num.is_none() {
                 first_num = Some(n);
                 // Check if this is the last element.
             } else if first_num.is_some() && second_num.is_none() && i == total_length - 1 {
                 second_num = Some(n);
-                nums.push(format!("{}{}", first_num.expect("Expected this to be defined"), n).parse().expect("Failed to parse into number (i32)"))
+                nums.push(
+                    format!("{}{}", first_num.expect("Expected this to be defined"), n)
+                        .parse()
+                        .expect("Failed to parse into number (i32)"),
+                )
             }
         }
     }
 
     let final_num: i32 = nums.iter().sum();
     println!("The final sum is {}", final_num);
-    return final_num;
+    final_num
 }
 
 // Just testing part two
@@ -124,21 +130,21 @@ mod tests {
         let result = part2(data);
         assert_eq!(result, 12);
     }
-    
+
     #[test]
     fn digits_in_the_middle() {
         let data = String::from("pqr3stu8vwx");
         let result = part2(data);
         assert_eq!(result, 38);
     }
-    
+
     #[test]
     fn multiple_digits_in_the_middle() {
         let data = String::from("a1b2c3d4e5f");
         let result = part2(data);
         assert_eq!(result, 15);
     }
-    
+
     #[test]
     fn one_digit_in_the_middle() {
         let data = String::from("treb7uchet");
@@ -152,14 +158,14 @@ mod tests {
         let result = part2(data);
         assert_eq!(result, 29);
     }
-    
+
     #[test]
     fn word_number_overlapping() {
         let data = String::from("eightwothree");
         let result = part2(data);
         assert_eq!(result, 83);
     }
-    
+
     #[test]
     fn word_number_and_digit_() {
         let data = String::from("abcone2threexyz");
@@ -194,7 +200,7 @@ mod tests {
         let result = part2(data);
         assert_eq!(result, 76);
     }
-    
+
     #[test]
     fn digit_at_the_start_with_word_numbers() {
         let data = String::from("1eightwo");
